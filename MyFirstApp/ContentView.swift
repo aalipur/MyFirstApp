@@ -9,16 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Let's style our text views with fonts, colors and line spacing.")
-            //.kerning(5)
-            .tracking(5) // не добавит пробел в конец в отличии от kerning
-            .lineLimit(nil)
-            .truncationMode(.middle)
+        /*Image("wired")
+            .resizable()
+            .aspectRatio(contentMode: .fit)*/
+        /*Image(systemName: "cloud.sun.fill")
             .font(.largeTitle)
-            .multilineTextAlignment(.center)
-            .background(Color.init(uiColor: .red))
-            .foregroundColor(.blue)
-            .lineSpacing(50)
+            .padding(30)
+            .background(Color.green)
+            .foregroundColor(Color.blue)
+            .clipShape(Circle())*/
+        Text("Hello, Apple!")
+            .background(Image(systemName: "message")
+                            .resizable()
+                            .frame(width: 130, height: 50, alignment: .center))
+            
     }
 }
 
