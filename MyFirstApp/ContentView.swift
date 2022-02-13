@@ -9,24 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        /*VStack(alignment: .center, spacing: 20) {
-            //Spacer()
-            Text("Hello, world!")
-                .padding(.bottom, 50)
-            //Divider()
-            Spacer()
-                .frame(height: 3)
-            Text("Hello!")
-                .padding(.vertical, 30)
-        }*/
-        ZStack {
-            Image("wired")
-            Text("MAGAzINE!")
-                .font(.largeTitle)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .padding(.top, 100)
-        }
+        Text("Let's style our text views with fonts, colors and line spacing.")
+            //.kerning(5)
+            .tracking(5) // не добавит пробел в конец в отличии от kerning
+            .lineLimit(nil)
+            .truncationMode(.middle)
+            .font(.largeTitle)
+            .multilineTextAlignment(.center)
+            .background(Color.init(uiColor: .red))
+            .foregroundColor(.blue)
+            .lineSpacing(50)
     }
 }
 
