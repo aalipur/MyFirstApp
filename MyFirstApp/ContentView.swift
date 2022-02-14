@@ -8,24 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var showHello = false
+    
     var body: some View {
-        // линейный градиент
-        /*Text("Hello, World!")
-            .font(.largeTitle)
-            .padding()
-            .foregroundColor(.white)
-            .background(LinearGradient(gradient: Gradient(colors: [.black, .white]), startPoint: .top, endPoint: .bottom)) */
-        // радиальный градиент
-        /*let colors = Gradient(colors: [.red, .yellow, .green, .blue, .purple])
-        let gradient = RadialGradient(gradient: colors, center: .center, startRadius: 50, endRadius: 200)
-        return Circle()
-            .fill(gradient)
-            .frame(width: 400, height: 400) */
-        // угловой градиент
-        let colors = Gradient(colors: [.red, .yellow, .green, .blue, .purple])
-        let gradient = AngularGradient(gradient: colors, center: .center)
-        return Circle()
-            .strokeBorder(gradient, lineWidth: 100)
+        // Property Wrapper: @State связь кода и действий на экране
+        VStack {
+            Toggle(isOn: $showHello) {Text("Show Hello!")} // $ связывает переменную showHello с Toggle
+                .padding()
+            if showHello {
+                Text("Hello")
+            }
+        }
     }
 }
 
