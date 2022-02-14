@@ -9,21 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @State private var showDetail = false
+    //@State private var name = ""
+    @State private var password = ""
     
     var body: some View {
+        /*VStack {
+            TextField("Enter your name", text: $name)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            Text("Hello, \(name)")
+        }*/
         VStack {
-        Button(action: {
-            // what to do
-            self.showDetail.toggle()
-        }) { Text("Show Details")}
-            .padding()
-            .background(Color.green)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-        if showDetail {
-            Text("Some details...")
+            SecureField("Enter password", text: $password)
+            Text("You entered: \(password).")
         }
-    }
     }
 }
 
