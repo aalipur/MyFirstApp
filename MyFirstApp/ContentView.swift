@@ -8,18 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @State private var showHello = false
+
+    @State private var showDetail = false
     
     var body: some View {
-        // Property Wrapper: @State связь кода и действий на экране
         VStack {
-            Toggle(isOn: $showHello) {Text("Show Hello!")} // $ связывает переменную showHello с Toggle
-                .padding()
-            if showHello {
-                Text("Hello")
-            }
+        Button(action: {
+            // what to do
+            self.showDetail.toggle()
+        }) { Text("Show Details")}
+            .padding()
+            .background(Color.green)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+        if showDetail {
+            Text("Some details...")
         }
+    }
     }
 }
 
