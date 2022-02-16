@@ -9,20 +9,29 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var selectedView = 1
+    @State private var colors = ["red", "green", "blue"]
+    @State private var selectedColor = 0
+    @State private var additionalSettings = false
     
     var body: some View {
-        TabView(selection: $selectedView) {
-            Text("first View")
-                .tabItem{
-                    Image(systemName: "1.circle")
-                    Text("First")
-                } .tag(1) // отслеживать в коде какое окно активно
-            Text("Second View")
-                .tabItem{
-                    Image(systemName: "2.circle")
-                    Text("Second")
-                } .tag(2)
+        NavigationView {
+            Form {
+                Section(header: Text("Colors")) {
+                    Picker(selection: $selectedColor, label: Text("Select color")) {
+                    ForEach(0..<colors.count) {
+                        Text(self.colors[$0])
+                        }
+                    }
+                } .pickerStyle(SegmentedPickerStyle())
+                Toggle(isOn: $additionalSettings) {
+                    Text("Additional settings")
+                }
+                Button(action: {
+                    //
+                }) {
+                    Text("Save changes")
+                } .disabled(!additionalSettings)
+            } .navigationBarTitle("Settings")
         }
     }
 }
