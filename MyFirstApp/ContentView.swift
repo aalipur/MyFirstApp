@@ -9,46 +9,21 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var users = ["Ian", "Maria", "Igor"]
+    @State private var selectedView = 1
     
     var body: some View {
-        /*NavigationView {
-            Text("SwiftUI!")
-            .navigationTitle("Welcome")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button("Help") {
-                            print("Tapped!")
-                        }
-                        Button("About") {
-                            print("About Tapped!")
-                        }
-                    }
-                }
-            }
-        }*/
-        NavigationView {
-            List {
-                ForEach(users, id: \.self) {
-                    Text($0)
-                } .onDelete(perform: delete)
-                  .onMove(perform: move)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-            }
+        TabView(selection: $selectedView) {
+            Text("first View")
+                .tabItem{
+                    Image(systemName: "1.circle")
+                    Text("First")
+                } .tag(1) // отслеживать в коде какое окно активно
+            Text("Second View")
+                .tabItem{
+                    Image(systemName: "2.circle")
+                    Text("Second")
+                } .tag(2)
         }
-    }
-    
-    func delete(at offsets: IndexSet) {
-        users.remove(atOffsets: offsets)
-    }
-    func move(from source: IndexSet, to destination: Int) {
-        users.move(fromOffsets: source, toOffset: destination)
     }
 }
 
