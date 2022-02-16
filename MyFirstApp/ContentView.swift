@@ -7,63 +7,48 @@
 
 import SwiftUI
 
-// статические элементы
-struct MusicRow: View {
-    var name: String
-    var body: some View {
-        Text("Music: \(name)")
-    }
-}
-
-// динамические элементы
-struct Restaurant: Identifiable {
-    
-    var id = UUID() // обязательная строка для протокола Identifiable
-    var name: String
-}
-
-struct RestaurantRow: View {
-    
-    var restaurant: Restaurant
-    var body: some View {
-        Text("Come and eat at \(restaurant.name)")
-    }
-}
-
-// список заданий
-struct TaskRow: View {
-    var body: some View {
-        Text("Some text")
-    }
-}
 struct ContentView: View {
+    
+    @State private var users = ["Ian", "Maria", "Igor"]
+    
     var body: some View {
-        // статические элемементы
-        /*List {
-            MusicRow(name: "Rock")
-            MusicRow(name: "Rap")
-            MusicRow(name: "Classic")
-        }*/
-         // динамические элементы
-        /*let first = Restaurant(name: "FirstRestaurant")
-        let second = Restaurant(name: "SecondRestaurant")
-        let third = Restaurant(name: "ThirdRestaurant")
-        let restaurants = [first, second, third]
-        
-        return List(restaurants) {RestaurantRow(restaurant: $0)
-        }*/
-        List {
-            Section(header: Text("Important tasks"), footer: Text("End")) {
-                TaskRow()
-                TaskRow()
-                TaskRow()
+        /*NavigationView {
+            Text("SwiftUI!")
+            .navigationTitle("Welcome")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        Button("Help") {
+                            print("Tapped!")
+                        }
+                        Button("About") {
+                            print("About Tapped!")
+                        }
+                    }
+                }
             }
-            Section(header: Text("Other tasks")) {
-                TaskRow()
-                TaskRow()
-                TaskRow()
-            } .listRowBackground(Color.yellow)
-        } .listStyle(GroupedListStyle())
+        }*/
+        NavigationView {
+            List {
+                ForEach(users, id: \.self) {
+                    Text($0)
+                } .onDelete(perform: delete)
+                  .onMove(perform: move)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+            }
+        }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        users.remove(atOffsets: offsets)
+    }
+    func move(from source: IndexSet, to destination: Int) {
+        users.move(fromOffsets: source, toOffset: destination)
     }
 }
 
