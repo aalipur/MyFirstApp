@@ -7,38 +7,63 @@
 
 import SwiftUI
 
+// статические элементы
+struct MusicRow: View {
+    var name: String
+    var body: some View {
+        Text("Music: \(name)")
+    }
+}
+
+// динамические элементы
+struct Restaurant: Identifiable {
+    
+    var id = UUID() // обязательная строка для протокола Identifiable
+    var name: String
+}
+
+struct RestaurantRow: View {
+    
+    var restaurant: Restaurant
+    var body: some View {
+        Text("Come and eat at \(restaurant.name)")
+    }
+}
+
+// список заданий
+struct TaskRow: View {
+    var body: some View {
+        Text("Some text")
+    }
+}
 struct ContentView: View {
     var body: some View {
-        
-        /*Text("Tap me!")
-            .onTapGesture {
-                print("Tapped!")
-            }*/
-        /*VStack {
-            Image("wired")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .onTapGesture(count: 2) {
-                    print("Double tapped!")
-                }
-            Spacer()
-            Text("Wired")
-        }   .contentShape(Rectangle())
-            .onTapGesture {
-            print("Hello Wired!")
+        // статические элемементы
+        /*List {
+            MusicRow(name: "Rock")
+            MusicRow(name: "Rap")
+            MusicRow(name: "Classic")
         }*/
-        /*Image("wired")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .gesture(LongPressGesture(minimumDuration: 2).onEnded{_ in
-                print("Pressed!")
-            })*/
-        Image("wired")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .gesture(DragGesture(minimumDistance: 50).onEnded{_ in
-                print("Dragged!")
-            })
+         // динамические элементы
+        /*let first = Restaurant(name: "FirstRestaurant")
+        let second = Restaurant(name: "SecondRestaurant")
+        let third = Restaurant(name: "ThirdRestaurant")
+        let restaurants = [first, second, third]
+        
+        return List(restaurants) {RestaurantRow(restaurant: $0)
+        }*/
+        List {
+            Section(header: Text("Important tasks"), footer: Text("End")) {
+                TaskRow()
+                TaskRow()
+                TaskRow()
+            }
+            Section(header: Text("Other tasks")) {
+                TaskRow()
+                TaskRow()
+                TaskRow()
+            } .listRowBackground(Color.yellow)
+        } .listStyle(GroupedListStyle())
     }
 }
 
