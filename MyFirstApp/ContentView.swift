@@ -9,29 +9,46 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var colors = ["red", "green", "blue"]
-    @State private var selectedColor = 0
-    @State private var additionalSettings = false
+    @State private var checkAmount = ""
+    @State private var numberOfPeople = 2
+    @State private var tipPercentage = 0
+    
+    let tipPercentages = [0, 5, 10, 15, 20]
+    var totalPerPersons: Double {
+        let peopleCount = Double(numberOfPeople + 2)
+        let tipSelection = Double(tipPercentages[tipPercentage])
+        let orderAmount = Double(checkAmount) ?? 0
+        let tipValue = orderAmount / 100 * tipSelection
+        let grandToltal = orderAmount + tipValue
+        let amountPerPerson = grandToltal / peopleCount
+        return amountPerPerson
+    }
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Colors")) {
-                    Picker(selection: $selectedColor, label: Text("Select color")) {
-                    ForEach(0..<colors.count) {
-                        Text(self.colors[$0])
+                Section {
+                    TextField("Amount", text: $checkAmount)
+                    Picker("Number of people", selection: $numberOfPeople) {
+                        ForEach(2..<100) {
+                            Text("\($0) people")
                         }
                     }
-                } .pickerStyle(SegmentedPickerStyle())
-                Toggle(isOn: $additionalSettings) {
-                    Text("Additional settings")
                 }
-                Button(action: {
-                    //
-                }) {
-                    Text("Save changes")
-                } .disabled(!additionalSettings)
-            } .navigationBarTitle("Settings")
+                Section(header: Text("How much tips?")) {
+                    Picker("Tip percentage", selection: $tipPercentage) {
+                        ForEach(0..<tipPercentages.count) {
+                            Text("\(self.tipPercentages[$0])%")
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                Section {
+                    Text("\(totalPerPersons, specifier: "%.2f")")
+                }
+            }
+            .navigationTitle("Tips calculator")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
