@@ -9,46 +9,47 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var checkAmount = ""
-    @State private var numberOfPeople = 2
-    @State private var tipPercentage = 0
+    @State private var showingAlert1 = false
+    @State private var showingAlert2 = false
     
-    let tipPercentages = [0, 5, 10, 15, 20]
-    var totalPerPersons: Double {
-        let peopleCount = Double(numberOfPeople + 2)
-        let tipSelection = Double(tipPercentages[tipPercentage])
-        let orderAmount = Double(checkAmount) ?? 0
-        let tipValue = orderAmount / 100 * tipSelection
-        let grandToltal = orderAmount + tipValue
-        let amountPerPerson = grandToltal / peopleCount
-        return amountPerPerson
-    }
+    @State private var showingAlert = false
+    
+    @State private var showingSheet = false
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    TextField("Amount", text: $checkAmount)
-                    Picker("Number of people", selection: $numberOfPeople) {
-                        ForEach(2..<100) {
-                            Text("\($0) people")
-                        }
-                    }
+        /*Button("Show Alert") {
+            self.showingAlert = true
+        } .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Hello SwiftUI"), message: Text("Some detail message"), dismissButton: .default(Text("Ok")))
+        }*/
+        /*HStack {
+            Button("Show 1") {
+                self.showingAlert1 = true
+            } .alert(isPresented: $showingAlert1) {
+                Alert(title: Text("One"), message: nil, dismissButton: .cancel())
                 }
-                Section(header: Text("How much tips?")) {
-                    Picker("Tip percentage", selection: $tipPercentage) {
-                        ForEach(0..<tipPercentages.count) {
-                            Text("\(self.tipPercentages[$0])%")
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
+            Button("Show 2") {
+                self.showingAlert2 = true
+            } .alert(isPresented: $showingAlert2) {
+                Alert(title: Text("Two"), message: nil, dismissButton: .cancel())
                 }
-                Section {
-                    Text("\(totalPerPersons, specifier: "%.2f")")
-                }
-            }
-            .navigationTitle("Tips calculator")
-            .navigationBarTitleDisplayMode(.inline)
+        }*/
+        /*Button(action: {
+            self.showingAlert = true
+        }) {
+            Text("Show Alert")
+        } .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Are you sure?"), message: Text("There is no way back"), primaryButton: .destructive(Text("Delete")) {
+                print("Deleting...")
+            }, secondaryButton: .cancel())
+        }*/
+        Button(action: {
+            self.showingAlert = true
+        }) {
+            Text("Show Action Sheets")
+        } .confirmationDialog("", isPresented: $showingSheet) {
+            /*ActionSheet(title: Text("What do you want to do?"), message: Text("There is only one choice..."), buttons: [.default(Text("Dismiss Action Sheet")), .cancel(), .destructive(Text("Delete"))])*/
+            
         }
     }
 }
