@@ -9,47 +9,58 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var showingAlert1 = false
-    @State private var showingAlert2 = false
-    
-    @State private var showingAlert = false
-    
-    @State private var showingSheet = false
+    @State private var countries = ["UK", "USA", "Bangladesh", "Germany", "Argentina", "Brazil", "Canada", "Greece", "Russia", "Sweden"].shuffled()
+    @State private var correctAnswer = Int.random(in: 0...2)
+    @State private var score = 0
+    @State private var showingScore = false
+    @State private var scoreTitle = ""
     
     var body: some View {
-        /*Button("Show Alert") {
-            self.showingAlert = true
-        } .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Hello SwiftUI"), message: Text("Some detail message"), dismissButton: .default(Text("Ok")))
-        }*/
-        /*HStack {
-            Button("Show 1") {
-                self.showingAlert1 = true
-            } .alert(isPresented: $showingAlert1) {
-                Alert(title: Text("One"), message: nil, dismissButton: .cancel())
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [.black, .white]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
+            VStack(spacing: 30) {
+                VStack {
+                    Text("Выбери флаг: ")
+                        .foregroundColor(.white)
+                        .font(.headline)
+                    Text(countries[correctAnswer])
+                        .foregroundColor(.white)
+                        .font(.largeTitle)
+                        .fontWeight(.black)
                 }
-            Button("Show 2") {
-                self.showingAlert2 = true
-            } .alert(isPresented: $showingAlert2) {
-                Alert(title: Text("Two"), message: nil, dismissButton: .cancel())
+                ForEach(0..<3) { number in
+                    Button(action: {
+                        self.flagTapped(number)
+                        self.showingScore = true
+                    }) {
+                        Image(self.countries[number])
+                            .renderingMode(.original)
+                            .frame(width: 250, height: 125)
+                            .clipShape(Capsule())
+                            .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+                            .shadow(color: .black, radius: 2)
+                    }
                 }
-        }*/
-        /*Button(action: {
-            self.showingAlert = true
-        }) {
-            Text("Show Alert")
-        } .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Are you sure?"), message: Text("There is no way back"), primaryButton: .destructive(Text("Delete")) {
-                print("Deleting...")
-            }, secondaryButton: .cancel())
-        }*/
-        Button(action: {
-            self.showingAlert = true
-        }) {
-            Text("Show Action Sheets")
-        } .confirmationDialog("", isPresented: $showingSheet) {
-            /*ActionSheet(title: Text("What do you want to do?"), message: Text("There is only one choice..."), buttons: [.default(Text("Dismiss Action Sheet")), .cancel(), .destructive(Text("Delete"))])*/
-            
+                Text("Общий счет: \(score)")
+                    .font(.largeTitle)
+                    .fontWeight(.black)
+                Spacer()
+            }
+        } .alert(isPresented: $showingScore) {
+            Alert(title: Text(scoreTitle), message: Text("Общий счет: \(score)"), dismissButton: .default(Text("продолжить")))
+        }
+    }
+    func askQuestion() {
+        countries.shuffle()
+        correctAnswer = Int.random(in: 0...2)
+    }
+    func flagTapped(_ number: Int) {
+        if number == correctAnswer {
+            scoreTitle = "Правильный ответ"
+            score += 1
+        } else {
+            scoreTitle = "Неправильно! Это флаг \(countries[number])"
+            score -= 1
         }
     }
 }
