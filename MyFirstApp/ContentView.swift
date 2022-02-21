@@ -7,25 +7,76 @@
 
 import SwiftUI
 
-class User: ObservableObject {
+/*struct DetailView: View {
     
-    @Published var firstName = "Ivan"
-    @Published var lastName = "Petrov"
+    var body: some View {
+        Text("This is the default view")
+    }
+} */
+
+/*struct Dog: Identifiable {
+    
+    var id = UUID()
+    var name: String
+}
+
+struct DogRow: View {
+    
+    var dog: Dog
+    var body: some View {
+        Text(dog.name)
+    }
+}
+
+struct DogView: View {
+    
+    var dog: Dog
+    var body: some View {
+        Text("Come and choose a \(dog.name)")
+            .font(.largeTitle)
+    }
+} */
+
+struct DetailView: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    var body: some View {
+        VStack {
+            Text("Detail")
+            Button("Back") {
+                self.presentationMode.wrappedValue.dismiss()
+            }
+        }
+    }
 }
 
 struct ContentView: View {
     
-    //@ObservedObject var user = User()
-    @ObservedObject var settings = UserSettings()
+    @State private var showDetail = false
     
     var body: some View {
-        VStack {
-            Text("Your score is \(settings.score)")
-            Button(action: {
-                self.settings.score += 1
-            }) {
-                Text("Increase score")
+        /*NavigationView {
+            VStack {
+                NavigationLink(destination: DetailView()) {
+                    Text("Show detail view")
+                } .navigationTitle("Navigation")
             }
+        } */
+        /*let first = Dog(name: "Sobaka")
+        let dogs = [first]
+        return NavigationView {
+            List(dogs) { dog in
+                NavigationLink(destination: DogView(dog: dog)) {
+                DogRow(dog: dog)
+                }
+            } .navigationTitle("Choose a dog")
+        } */
+        Button(action: {
+            self.showDetail.toggle()
+        }) {
+            Text("Show detail")
+        } .sheet(isPresented: $showDetail) {
+            DetailView()
         }
     }
 }
