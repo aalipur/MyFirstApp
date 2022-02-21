@@ -7,76 +7,30 @@
 
 import SwiftUI
 
-/*struct DetailView: View {
+struct User: Codable {
     
-    var body: some View {
-        Text("This is the default view")
-    }
-} */
-
-/*struct Dog: Identifiable {
-    
-    var id = UUID()
-    var name: String
+    var firstName: String
+    var lastName: String
 }
 
-struct DogRow: View {
-    
-    var dog: Dog
-    var body: some View {
-        Text(dog.name)
-    }
-}
+// JSON Encoder
 
-struct DogView: View {
-    
-    var dog: Dog
-    var body: some View {
-        Text("Come and choose a \(dog.name)")
-            .font(.largeTitle)
-    }
-} */
-
-struct DetailView: View {
-    
-    @Environment(\.presentationMode) var presentationMode
-    var body: some View {
-        VStack {
-            Text("Detail")
-            Button("Back") {
-                self.presentationMode.wrappedValue.dismiss()
-            }
-        }
-    }
-}
 
 struct ContentView: View {
     
-    @State private var showDetail = false
+    //@State private var tapCount = UserDefaults.standard.integer(forKey: "Tap")
+    @State private var user = User(firstName: "Ivan", lastName: "Petrov")
     
     var body: some View {
-        /*NavigationView {
-            VStack {
-                NavigationLink(destination: DetailView()) {
-                    Text("Show detail view")
-                } .navigationTitle("Navigation")
+        /*Button("Tap Count \(tapCount)") {
+            self.tapCount += 1
+            UserDefaults.standard.set(self.tapCount, forKey: "Tap")
+        } */
+        Button("Save user") {
+            let encoder = JSONEncoder()
+            if let data = try? encoder.encode(self.user) {
+                UserDefaults.standard.set(data, forKey: "User")
             }
-        } */
-        /*let first = Dog(name: "Sobaka")
-        let dogs = [first]
-        return NavigationView {
-            List(dogs) { dog in
-                NavigationLink(destination: DogView(dog: dog)) {
-                DogRow(dog: dog)
-                }
-            } .navigationTitle("Choose a dog")
-        } */
-        Button(action: {
-            self.showDetail.toggle()
-        }) {
-            Text("Show detail")
-        } .sheet(isPresented: $showDetail) {
-            DetailView()
         }
     }
 }
