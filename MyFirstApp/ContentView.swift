@@ -7,54 +7,28 @@
 
 import SwiftUI
 
-struct CustomText: View {
+class User: ObservableObject {
     
-    var name: String
-    var body: some View {
-        Text(name)
-            .font(.largeTitle)
-            .padding()
-            .foregroundColor(.red)
-            .background(Color.green)
-    }
-}
-
-struct CustomModifier: ViewModifier {
-    
-    func body(content : Content) -> some View {
-        content
-            .font(.largeTitle)
-            .foregroundColor(.white)
-            .padding()
-            .background(Color.black)
-    }
+    @Published var firstName = "Ivan"
+    @Published var lastName = "Petrov"
 }
 
 struct ContentView: View {
     
-    //@State private var useGreenText = false
+    //@ObservedObject var user = User()
+    @ObservedObject var settings = UserSettings()
     
     var body: some View {
-        /*Button("Hello, World!") { // условный модификатор
-            self.useGreenText.toggle()
-        } .foregroundColor(useGreenText ? .green: .blue) */
-        /*VStack(spacing: 30) {
-            CustomText(name: "First")
-            CustomText(name: "Second")
-        } */
-        Text("Hello, Swift!")
-            .CustomM()
+        VStack {
+            Text("Your score is \(settings.score)")
+            Button(action: {
+                self.settings.score += 1
+            }) {
+                Text("Increase score")
+            }
+        }
     }
 }
-
-extension View {
-    
-    func CustomM() -> some View {
-        self.modifier(CustomModifier)
-    }
-}
-
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
