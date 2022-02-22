@@ -7,31 +7,71 @@
 
 import SwiftUI
 
-struct User: Codable {
+struct ExpenceItem: Identifiable, Encodable, Decodable {
     
-    var firstName: String
-    var lastName: String
+    var id = UUID()
+    let name: String
+    let type: String
+    let amount: Int
 }
 
-// JSON Encoder
-
+class Expenses: ObservableObject {
+    
+    @Published var items = [ExpenceItem]() {
+        didSet {
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(items) {
+                UserDefaults.standard.set(encoded, forKey: "Items")
+            }
+        }
+    }
+    init() {
+        if let items = UserDefaults.standard.data(forKey: "Items") {
+            let decoder = JSONDecoder()
+            if let decoded = try? decoder.decode([ExpenceItem].self, from: items) {
+                self.items = decoded
+                return
+            }
+        }
+    }
+}
 
 struct ContentView: View {
     
-    //@State private var tapCount = UserDefaults.standard.integer(forKey: "Tap")
-    @State private var user = User(firstName: "Ivan", lastName: "Petrov")
+    @State private var showingAddExpence = false
+    @ObservedObject var expenses = Expenses()
     
     var body: some View {
-        /*Button("Tap Count \(tapCount)") {
-            self.tapCount += 1
-            UserDefaults.standard.set(self.tapCount, forKey: "Tap")
-        } */
-        Button("Save user") {
-            let encoder = JSONEncoder()
-            if let data = try? encoder.encode(self.user) {
-                UserDefaults.standard.set(data, forKey: "User")
+        NavigationView {
+            List {
+                ForEach(expenses.items) { item in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(item.name)
+                                .font(.headline)
+                            Text(item.type)
+                        }
+                        Spacer()
+                        Text("$\(item.amount)")
+                    }
+                }
+                .onDelete(perform: removeItems)
+            }
+            .navigationTitle("Мои расходы")
+            .navigationBarItems(trailing:
+                Button(action: {
+                self.showingAddExpence = true
+            }) {
+                Image(systemName: "plus")
+            }
+            )
+            .sheet(isPresented: $showingAddExpence) {
+                AddView(expenses: self.expenses)
             }
         }
+    }
+    func removeItems(as offsets: IndexSet) {
+        expenses.items.remove(atOffsets: offsets)
     }
 }
 
